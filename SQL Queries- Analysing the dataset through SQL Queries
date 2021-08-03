@@ -1,0 +1,66 @@
+SELECT * FROM netflix_2016to2020;
+
+--Proportion of different content types on Netflix
+SELECT content_type, COUNT(content_type) AS proportion FROM netflix_2016to2020
+GROUP BY content_type
+ORDER BY proportion DESC;
+
+----Top 10 genres of movies
+SELECT UNNEST(STRING_TO_ARRAY(genres, ',')) AS genres, COUNT(show_id) AS popular_genres FROM netflix_2016to2020
+WHERE content_type = 'Movie'
+GROUP BY UNNEST(STRING_TO_ARRAY(genres, ','))
+ORDER BY popular_genres DESC
+LIMIT 10;
+
+--Top 10 genres of tv shows
+SELECT UNNEST(STRING_TO_ARRAY(genres, ',')) AS genres, COUNT(show_id) AS popular_genres FROM netflix_2016to2020
+WHERE content_type = 'TV Show'
+GROUP BY UNNEST(STRING_TO_ARRAY(genres, ','))
+ORDER BY popular_genres DESC
+LIMIT 10;
+
+--Number of shows released per year
+SELECT EXTRACT (YEAR FROM date_added) AS year, COUNT(show_id) AS number_of_shows_released FROM netflix_2016to2020
+WHERE date_added IS NOT NULL
+GROUP BY year
+ORDER BY year;
+
+--Show ratings
+SELECT rating, COUNT(show_id) AS rating_count FROM netflix_2016to2020
+WHERE rating IS NOT NULL
+GROUP BY rating
+ORDER BY rating_count DESC;
+
+--Show ratings by content type
+SELECT rating, content_type, COUNT(show_id) AS rating_count FROM netflix_2016to2020
+WHERE rating IS NOT NULL
+GROUP BY rating, content_type
+ORDER BY rating;
+
+--Frequency of release over the past 10 years
+SELECT EXTRACT(YEAR FROM date_added) AS year, content_type, COUNT(*) AS number_of_shows_released FROM
+netflix_2016to2020
+WHERE date_added IS NOT NULL
+GROUP BY year, content_type
+ORDER BY year;
+
+--Shows released by countries
+SELECT UNNEST(STRING_TO_ARRAY(production_country,' ,')) AS country, COUNT(show_id) AS number_of_shows_released FROM netflix_2016to2020
+GROUP BY UNNEST(STRING_TO_ARRAY(production_country,' ,'))
+ORDER BY number_of_shows_released DESC;
+
+--Content type produced by countries
+SELECT UNNEST(STRING_TO_ARRAY(production_country, ',')) AS country, content_type, COUNT(show_id) AS number_of_shows
+FROM netflix_2016to2020
+GROUP BY UNNEST(STRING_TO_ARRAY(production_country, ',')), content_type
+ORDER BY country;
+
+--Genre makeup of content
+SELECT UNNEST(STRING_TO_ARRAY(genres, ',')), COUNT(*) AS number_of_shows FROM netflix_2016to2020
+GROUP BY UNNEST(STRING_TO_ARRAY(genres, ','))
+ORDER BY number_of_shows DESC;
+
+--Dusration of tv shows and movies
+SELECT duration, COUNT(*) AS number_of_shows FROM netflix_2016to2020
+GROUP BY duration
+ORDER BY number_of_shows DESC;
