@@ -1,0 +1,14 @@
+CREATE TABLE netflix_2016to2020 
+(Show_Id VARCHAR(40),
+Title VARCHAR(105),
+Description VARCHAR(260),
+Director VARCHAR(210),
+Genres VARCHAR(80),
+actors VARCHAR(780),
+Production_Country VARCHAR(85),
+Release_Date INTEGER,
+Rating VARCHAR(6),
+Duration VARCHAR(15),
+Imdb_Score VARCHAR(10),
+Content_Type VARCHAR(10),
+Date_Added DATE);
